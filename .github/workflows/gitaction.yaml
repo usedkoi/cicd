@@ -4,6 +4,7 @@ on:
     branches: [ "main" ]
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
@@ -24,6 +25,16 @@ jobs:
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
           arguments: clean bootJar
+
+      #AWS에 로그인
+      #arn 값은 자격 증명 공급자에서 만든 role에서 찾아서 설정
+      - name: AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::641022061021:role/cicd
+          role-session-name: sampleSessionName
+          aws-region: ap-northeast-2
+
 
       #Docker Hub 로그인
       - name: Login to DockerHub
