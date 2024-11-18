@@ -11,6 +11,11 @@ env:
   AWS_REGION: ap-northeast-2
   ECR_REPOSITORY: cicd
 
+  ECS_SERVICE: cicd
+  ECS_CLUSTER: itstudy
+  CONTAINER_NAME: itstudyngnix
+  ECS_TASK_DEFINITION: ./task-defintion.json
+
 
 jobs:
   build-docker-image:
@@ -58,3 +63,11 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
+      # 6. task를 수정하는 작업
+      - name: Fill in the new image ID in the Amazon ECS TASK Definition
+        id: task-definition
+        uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c07
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
