@@ -26,6 +26,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
       #AWS에 로그인
       #arn 값은 자격 증명 공급자에서 만든 role에서 찾아서 설정
       - name: AWS Credentials
