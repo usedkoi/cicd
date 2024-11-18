@@ -14,7 +14,7 @@ env:
   ECS_SERVICE: cicd
   ECS_CLUSTER: itstudy
   CONTAINER_NAME: itstudyngnix
-  ECS_TASK_DEFINITION: ./task-defintion.json
+  ECS_TASK_DEFINITION: ./task-definition.json
 
 
 jobs:
