@@ -13,7 +13,7 @@ env:
 
   ECS_SERVICE: cicd
   ECS_CLUSTER: itstudy
-  CONTAINER_NAME: itstudyngnix
+  CONTAINER_NAME: itstudynginx
   ECS_TASK_DEFINITION: ./task-definition.json
 
 
@@ -71,3 +71,12 @@ jobs:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
+
+      # 7. ECS에 태스크를 배포
+      - name: Deploy Amazon ECS Task Definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@df9643053eda01f169e64a0e60233aacca83799a
+        with:
+          task-definition: ${{ steps.task-definition.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
